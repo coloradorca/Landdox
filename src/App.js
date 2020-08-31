@@ -8,24 +8,46 @@ import './App.css';
 import EditTractOwnership from './EditTractOwnership';
 import Icon from './Icon';
 
+// const tractOwnerships = [
+//   {
+//     id: uuidv4(),
+//     owner: 'Luke Skywalker',
+//     interest: 0.5,
+//     lease: 'Tatooine Lease',
+//     npris: [
+//       {
+//         id: uuidv4(),
+//         owner: 'Leia Organa',
+//         interest: 0.45,
+//       },
+//       {
+//         id: uuidv4(),
+//         owner: 'Han Solo',
+//         interest: 0.15,
+//       },
+//     ],
+//   },
+// ];
+
 const tractOwnerships = [
   {
     id: uuidv4(),
     owner: 'Luke Skywalker',
-    interest: 0.5,
+    interest: '50',
     lease: 'Tatooine Lease',
     npris: [
       {
         id: uuidv4(),
-        owner: 'Leia Organa',
-        interest: 0.45,
-      },
-      {
-        id: uuidv4(),
         owner: 'Han Solo',
-        interest: 0.15,
+        interest: '10',
       },
     ],
+  },
+  {
+    id: uuidv4(),
+    owner: 'Leia Organa',
+    interest: '5',
+    lease: 'Alderaan Lease',
   },
 ];
 

@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/Landdox/static/css/main.5f361e03.chunk.css",
-    "main.js": "/Landdox/static/js/main.32d278a8.chunk.js",
-    "main.js.map": "/Landdox/static/js/main.32d278a8.chunk.js.map",
+    "main.css": "/Landdox/static/css/main.890fdfa1.chunk.css",
+    "main.js": "/Landdox/static/js/main.13baf8ad.chunk.js",
+    "main.js.map": "/Landdox/static/js/main.13baf8ad.chunk.js.map",
     "runtime-main.js": "/Landdox/static/js/runtime-main.19726b4e.js",
     "runtime-main.js.map": "/Landdox/static/js/runtime-main.19726b4e.js.map",
     "static/css/2.f3cffc9e.chunk.css": "/Landdox/static/css/2.f3cffc9e.chunk.css",
-    "static/js/2.ef63f5f6.chunk.js": "/Landdox/static/js/2.ef63f5f6.chunk.js",
-    "static/js/2.ef63f5f6.chunk.js.map": "/Landdox/static/js/2.ef63f5f6.chunk.js.map",
+    "static/js/2.c4576e7b.chunk.js": "/Landdox/static/js/2.c4576e7b.chunk.js",
+    "static/js/2.c4576e7b.chunk.js.map": "/Landdox/static/js/2.c4576e7b.chunk.js.map",
     "index.html": "/Landdox/index.html",
-    "precache-manifest.2caa00e62a9e1f1c2ec3444e3bedc518.js": "/Landdox/precache-manifest.2caa00e62a9e1f1c2ec3444e3bedc518.js",
+    "precache-manifest.b9c7ddb5b379bca1d89223d073286311.js": "/Landdox/precache-manifest.b9c7ddb5b379bca1d89223d073286311.js",
     "service-worker.js": "/Landdox/service-worker.js",
     "static/css/2.f3cffc9e.chunk.css.map": "/Landdox/static/css/2.f3cffc9e.chunk.css.map",
-    "static/css/main.5f361e03.chunk.css.map": "/Landdox/static/css/main.5f361e03.chunk.css.map",
-    "static/js/2.ef63f5f6.chunk.js.LICENSE.txt": "/Landdox/static/js/2.ef63f5f6.chunk.js.LICENSE.txt"
+    "static/css/main.890fdfa1.chunk.css.map": "/Landdox/static/css/main.890fdfa1.chunk.css.map",
+    "static/js/2.c4576e7b.chunk.js.LICENSE.txt": "/Landdox/static/js/2.c4576e7b.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.19726b4e.js",
     "static/css/2.f3cffc9e.chunk.css",
-    "static/js/2.ef63f5f6.chunk.js",
-    "static/css/main.5f361e03.chunk.css",
-    "static/js/main.32d278a8.chunk.js"
+    "static/js/2.c4576e7b.chunk.js",
+    "static/css/main.890fdfa1.chunk.css",
+    "static/js/main.13baf8ad.chunk.js"
   ]
 }

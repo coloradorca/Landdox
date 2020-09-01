@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/Landdox/precache-manifest.2caa00e62a9e1f1c2ec3444e3bedc518.js"
+  "/Landdox/precache-manifest.b9c7ddb5b379bca1d89223d073286311.js"
 );
 
 self.addEventListener('message', (event) => {

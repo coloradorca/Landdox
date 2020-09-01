@@ -1,183 +1,224 @@
 import React from 'react';
-import { useEffect, useState } from 'react';
-import { Table, InputGroup, FormControl, Button } from 'react-bootstrap';
+import { useReducer } from 'react';
+import { Table, InputGroup, FormControl, Button, Form } from 'react-bootstrap';
 import Icon from '../Icon/index.js';
 
 const EditTractOwnership = ({ value = [], onChange = () => {} }) => {
-  //have two states, one to render the rows, the other to keep track of tracts
-  const [tracts, updateTracts] = useState([]);
-  const [tablerows, updateTableRows] = useState([]);
+  const [tracts, dispatch] = useReducer(reducer, value);
 
-  //set up the initial state from value prop
-  useEffect(() => {
-    value.map((tract, index) => {
-      const eachTract = {
-        index: index,
-        id: tract.id,
-        owner: tract.owner,
-        interest: tract.interest,
-        lease: tract.lease,
-        npris: tract.npris,
-      };
-      updateTracts((item) => [...item, eachTract]);
+  function reducer(state, action) {
+    switch (action.type) {
+      case 'owner':
+        let updatedTracts = [...state];
+        updatedTracts[action.index] = {
+          ...updatedTracts[action.index],
+          [action.field]: action.value,
+        };
+        return updatedTracts;
+      case 'npri':
+        console.log(action);
+        let updatedNpri = [...state];
+        updatedNpri[action.ownerIndex].npris[action.npriIndex] = {
+          ...updatedNpri[action.ownerIndex].npris[action.npriIndex],
+          [action.npriField]: action.npriFieldValue,
+        };
+        return updatedNpri;
+      case 'addMin':
+        let addNewMineralInterest = [...state];
+        addNewMineralInterest[state.length] = {
+          index: state.length,
+          owner: 'add an owner',
+          interest: 'add interest',
+          lease: 'add lease',
+          npris: [],
+        };
+        return addNewMineralInterest;
+      case 'addNpri':
+        let addNewNpri = [...state];
+        addNewNpri[state.length - 1].npris[
+          addNewNpri[state.length - 1].npris.length
+        ] = {
+          id: '',
+          interest: 'add interest',
+          owner: 'add an owner',
+        };
+        console.log(addNewNpri[state.length - 1].npris);
+        return addNewNpri;
+      case 'removeMineralInterst':
+        let removedMineralInterest = [...state];
+        return removedMineralInterest.filter(
+          (el, id) => el.owner !== action.owner
+        );
+      case 'removeNpri':
+        let removedNpri = [...state];
+        // console.log(removedNpri[action.customerIndex].npris);
+        // return removedNpri[action.customerIndex].npris.filter(
+        //   (el, id) => id !== action.index
+        // );
+        return removedNpri;
+      default:
+        throw new Error();
+    }
+  }
+  const addMineralInterest = (e) => {
+    dispatch({
+      type: 'addMin',
     });
-  }, []);
+  };
+  const addNpri = (e) => {
+    dispatch({
+      type: 'addNpri',
+    });
+  };
+  const removeMineralInterest = (index, e, owner) => {
+    dispatch({
+      type: 'removeMineralInterst',
+      index: index,
+      owner: owner,
+    });
+  };
 
-  //useEffect hook to use the updateTableRows function to update the tablerows
-  useEffect(() => {
-    tracts.map((tractOwnerships, index) => {
-      let newRow = (
-        <tr data-testid={`mineralInterest-${tractOwnerships.id}`} key={index}>
-          <td id={`mineralInterest-${tractOwnerships.id}`}>
-            <InputGroup className="owner">
-              <FormControl placeholder={tractOwnerships.owner} />
-            </InputGroup>
-          </td>
-          <td id={`mineralInterest-${tractOwnerships.id}`}>
-            <InputGroup>
-              <FormControl placeholder={tractOwnerships.interest} />
-              <InputGroup.Append>
-                <InputGroup.Text>%</InputGroup.Text>
-              </InputGroup.Append>
-            </InputGroup>
+  const removeNpri = (customerIndex, npriOwner, npriIndex, e) => {
+    dispatch({
+      type: 'removeNpri',
+      index: npriIndex,
+      npriOwner: npriOwner,
+      customerIndex: customerIndex,
+    });
+  };
+
+  const handleOwnerChange = (e) => {
+    dispatch({
+      type: 'owner',
+      field: e.target.name,
+      index: e.target.id,
+      value: e.target.value,
+    });
+  };
+  const handleNpriChange = (customerIndex, e) => {
+    dispatch({
+      type: 'npri',
+      ownerIndex: customerIndex,
+      npriIndex: e.target.id,
+      npriField: e.target.name,
+      npriFieldFalue: e.target.value,
+    });
+  };
+  const renderRows = (tracts) => {
+    return tracts.map((tractOwnerships, index) => {
+      return (
+        <>
+          <tr data-testid={`mineralInterest-${tractOwnerships.id}`} key={index}>
+            <td id={`mineralInterest-${tractOwnerships.id}`}>
+              <Form.Group controlId={index}>
+                <InputGroup id={index} className="owner">
+                  <FormControl
+                    name="owner"
+                    value={tractOwnerships.owner}
+                    onChange={handleOwnerChange}
+                    type="text"
+                  />
+                </InputGroup>
+              </Form.Group>
+            </td>
+            <td id={`mineralInterest-${tractOwnerships.id}`}>
+              <Form.Group controlId={index}>
+                <InputGroup>
+                  <FormControl
+                    name="interest"
+                    value={tractOwnerships.interest}
+                    onChange={handleOwnerChange}
+                  />
+                  <InputGroup.Append>
+                    <InputGroup.Text>%</InputGroup.Text>
+                  </InputGroup.Append>
+                </InputGroup>
+              </Form.Group>
+            </td>
+            <td></td>
+            <td id={`mineralinterest-${tractOwnerships.id}`}>
+              <Form.Group controlId={index}>
+                <InputGroup className="lease">
+                  <FormControl
+                    name="lease"
+                    value={tractOwnerships.lease}
+                    onChange={handleOwnerChange}
+                  />
+                </InputGroup>
+              </Form.Group>
+            </td>
+            <td>
+              <div>
+                <Button
+                  variant="light"
+                  onClick={(e) =>
+                    removeMineralInterest(index, e, tractOwnerships.owner)
+                  }
+                >
+                  <Icon icon={'remove'} />
+                </Button>
+              </div>
+            </td>
+          </tr>
+          {renderNpris(tractOwnerships.npris, index)}
+        </>
+      );
+    });
+  };
+  const renderNpris = (npris, customerIndex) => {
+    return npris.map((npri, npriIndex) => {
+      return (
+        <tr data-testid={`mineralInterest-${npri.id}`} key={npri.id}>
+          <td id={`mineralInterest-${npri.id}`}>
+            <Form.Group controlId={npriIndex}>
+              <InputGroup id={npriIndex} className="owner">
+                <Icon icon={'indent'} />
+                <FormControl
+                  name="owner"
+                  value={tracts[customerIndex].npris[npriIndex].owner}
+                  onChange={(e) => handleNpriChange(customerIndex, e)}
+                  type="text"
+                />
+              </InputGroup>
+            </Form.Group>
           </td>
           <td></td>
-          <td id={`mineralinterest-${tractOwnerships.id}`}>
-            <InputGroup className="lease">
-              <FormControl placeholder={tractOwnerships.lease} />
-            </InputGroup>
+          <td id={`mineralInterest-${npri.id}`}>
+            <Form.Group controlId={npriIndex}>
+              <InputGroup>
+                <FormControl
+                  name="interest"
+                  value={tracts[customerIndex].npris[npriIndex].interest}
+                  onChange={(e) => handleNpriChange(customerIndex, e)}
+                  type="text"
+                />
+                <InputGroup.Append>
+                  <InputGroup.Text>%</InputGroup.Text>
+                </InputGroup.Append>
+              </InputGroup>
+            </Form.Group>
           </td>
+          <td></td>
           <td>
             <div>
-              <Button variant="light" onClick={() => removeRow(index)}>
+              <Button
+                variant="light"
+                onClick={(e) =>
+                  removeNpri(customerIndex, npri.owner, npriIndex, e)
+                }
+              >
                 <Icon icon={'remove'} />
               </Button>
             </div>
           </td>
         </tr>
       );
-      updateTableRows((rows) => [...rows, newRow]);
-
-      if (tractOwnerships.npris) {
-        tractOwnerships.npris.map((npri) => {
-          const npriRow = (
-            <tr data-testid={`mineralInterest-${npri.id}`} key={index}>
-              <td id={`mineralInterest-${npri.id}`}>
-                <InputGroup className="owner">
-                  <Icon icon={'indent'} />
-                  {'  '}
-                  <FormControl name="npriOwner" placeholder={npri.owner} />
-                </InputGroup>
-              </td>
-              <td></td>
-              <td id={`mineralInterest-${npri.id}`}>
-                <InputGroup>
-                  <FormControl placeholder={npri.interest} />
-                  <InputGroup.Append>
-                    <InputGroup.Text>%</InputGroup.Text>
-                  </InputGroup.Append>
-                </InputGroup>
-              </td>
-              <td></td>
-              <td>
-                <div>
-                  <Button variant="light" onClick={() => removeRow(index)}>
-                    <Icon icon={'remove'} />
-                  </Button>
-                </div>
-              </td>
-            </tr>
-          );
-          updateTableRows((rows) => [...rows, npriRow]);
-        });
-      }
     });
-  }, [tracts]);
-
-  const addMineralInterest = (row) => {
-    let newRow = (
-      <tr data-testid={`mineralInterest-`}>
-        <td id={`mineralInterest-`}>
-          <InputGroup className="owner">
-            <FormControl placeholder={'add a mineral interest owner'} />
-          </InputGroup>
-        </td>
-        <td key={`mineralInterestValue`}>
-          <InputGroup>
-            <FormControl placeholder={'add an interest value'} />
-            <InputGroup.Append>
-              <InputGroup.Text>%</InputGroup.Text>
-            </InputGroup.Append>
-          </InputGroup>
-        </td>
-        <td key={`npri`}>
-          <tr data-testid={`npri-`}></tr>
-        </td>
-        <td key={`lease`}>
-          <InputGroup className="lease">
-            <FormControl placeholder={'add a lease name'} />
-          </InputGroup>
-        </td>
-        <td>
-          <div>
-            <Button variant="light" onClick={() => removeRow()}>
-              <Icon icon={'remove'} />
-            </Button>
-          </div>
-        </td>
-      </tr>
-    );
-    updateTableRows((rows) => [...rows, newRow]);
   };
-
-  const addNpri = (row) => {
-    const npriRow = (
-      <tr data-testid={`mineralInterest-$`}>
-        <td id={`mineralInterest-`}>
-          <InputGroup className="owner">
-            <Icon icon={'indent'} />
-            {'  '}
-            <FormControl name="npriOwner" placeholder="add Owner" />
-          </InputGroup>
-        </td>
-        <td></td>
-        <td id={`mineralInterest-`}>
-          <InputGroup>
-            <FormControl placeholder="add Interest" />
-            <InputGroup.Append>
-              <InputGroup.Text>%</InputGroup.Text>
-            </InputGroup.Append>
-          </InputGroup>
-        </td>
-        <td></td>
-        <td>
-          <div>
-            <Button variant="light" onClick={removeRow}>
-              <Icon icon={'remove'} />
-            </Button>
-          </div>
-        </td>
-      </tr>
-    );
-    updateTableRows((rows) => [...rows, npriRow]);
-  };
-
-  //call the onChange prop to pass the tests
-  // const handleInputChange = (event) => {
-  //   const
-  // }
-
-  //function to delete mineral Interest
-  const removeRow = (id) => {
-    const del = tracts.filter((row) => row.index !== id);
-    console.log(del);
-    updateTableRows(del);
-  };
-
-  return tablerows ? (
+  return (
     <div>
       <div>
-        <Table hover onChange={updateTableRows}>
+        <Table hover>
           <thead>
             <tr>
               <th>Owner</th>
@@ -186,7 +227,7 @@ const EditTractOwnership = ({ value = [], onChange = () => {} }) => {
               <th>Lease</th>
             </tr>
           </thead>
-          <tbody>{tablerows.map((row) => row)}</tbody>
+          <tbody>{renderRows(tracts)}</tbody>
         </Table>
       </div>
       <div>
@@ -197,20 +238,13 @@ const EditTractOwnership = ({ value = [], onChange = () => {} }) => {
         </Button>
       </div>
       <div>
-        <Button
-          variant="light"
-          onClick={addMineralInterest}
-          onChange={onChange}
-        >
+        <Button variant="light" onClick={addMineralInterest}>
           <Icon icon={'add'} />
           {'  '}
           Add Mineral Interest
         </Button>
       </div>
     </div>
-  ) : (
-    <div></div>
   );
 };
-
 export default EditTractOwnership;

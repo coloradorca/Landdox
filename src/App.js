@@ -29,28 +29,6 @@ const tractOwnerships = [
   },
 ];
 
-// const tractOwnerships = [
-//   {
-//     id: uuidv4(),
-//     owner: 'Luke Skywalker',
-//     interest: '50',
-//     lease: 'Tatooine Lease',
-//     npris: [
-//       {
-//         id: uuidv4(),
-//         owner: 'Han Solo',
-//         interest: '10',
-//       },
-//     ],
-//   },
-//   {
-//     id: uuidv4(),
-//     owner: 'Leia Organa',
-//     interest: '5',
-//     lease: 'Alderaan Lease',
-//   },
-// ];
-
 function App() {
   return (
     <Container>

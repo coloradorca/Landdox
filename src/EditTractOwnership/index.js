@@ -41,17 +41,7 @@ const EditTractOwnership = ({ value = [], onChange = () => {} }) => {
               </InputGroup.Append>
             </InputGroup>
           </td>
-          <td id={`mineralinterest-${tractOwnerships.id}`}>
-            {value[index].npris ? (
-              value[index].npris.map((el) => (
-                <td data-testid={`npri-${el.id}`} key={el.id}>
-                  {el.owner}
-                </td>
-              ))
-            ) : (
-              <td> </td>
-            )}
-          </td>
+          <td></td>
           <td id={`mineralinterest-${tractOwnerships.id}`}>
             <InputGroup className="lease">
               <FormControl placeholder={tractOwnerships.lease} />
@@ -67,45 +57,109 @@ const EditTractOwnership = ({ value = [], onChange = () => {} }) => {
         </tr>
       );
       updateTableRows((rows) => [...rows, newRow]);
+
+      if (tractOwnerships.npris) {
+        tractOwnerships.npris.map((npri) => {
+          const npriRow = (
+            <tr data-testid={`mineralInterest-${npri.id}`} key={index}>
+              <td id={`mineralInterest-${npri.id}`}>
+                <InputGroup className="owner">
+                  <Icon icon={'indent'} />
+                  {'  '}
+                  <FormControl name="npriOwner" placeholder={npri.owner} />
+                </InputGroup>
+              </td>
+              <td></td>
+              <td id={`mineralInterest-${npri.id}`}>
+                <InputGroup>
+                  <FormControl placeholder={npri.interest} />
+                  <InputGroup.Append>
+                    <InputGroup.Text>%</InputGroup.Text>
+                  </InputGroup.Append>
+                </InputGroup>
+              </td>
+              <td></td>
+              <td>
+                <div>
+                  <Button variant="light" onClick={() => removeRow(index)}>
+                    <Icon icon={'remove'} />
+                  </Button>
+                </div>
+              </td>
+            </tr>
+          );
+          updateTableRows((rows) => [...rows, npriRow]);
+        });
+      }
     });
   }, [tracts]);
 
-  const addRow = (row) => {
+  const addMineralInterest = (row) => {
     let newRow = (
-      <div>
-        <tr data-testid={`mineralInterest-`}>
-          <td id={`mineralInterest-`}>
-            <InputGroup className="owner">
-              <FormControl placeholder={'add a mineral interest owner'} />
-            </InputGroup>
-          </td>
-          <td key={`mineralInterestValue`}>
-            <InputGroup>
-              <FormControl placeholder={'add an interest value'} />
-              <InputGroup.Append>
-                <InputGroup.Text>%</InputGroup.Text>
-              </InputGroup.Append>
-            </InputGroup>
-          </td>
-          <td key={`npri`}>
-            <tr data-testid={`npri-`}>{'add NPRI'} </tr>
-          </td>
-          <td key={`lease`}>
-            <InputGroup className="lease">
-              <FormControl placeholder={'add a lease name'} />
-            </InputGroup>
-          </td>
-          <td>
-            <div>
-              <Button variant="light" onClick={() => removeRow()}>
-                <Icon icon={'remove'} />
-              </Button>
-            </div>
-          </td>
-        </tr>
-      </div>
+      <tr data-testid={`mineralInterest-`}>
+        <td id={`mineralInterest-`}>
+          <InputGroup className="owner">
+            <FormControl placeholder={'add a mineral interest owner'} />
+          </InputGroup>
+        </td>
+        <td key={`mineralInterestValue`}>
+          <InputGroup>
+            <FormControl placeholder={'add an interest value'} />
+            <InputGroup.Append>
+              <InputGroup.Text>%</InputGroup.Text>
+            </InputGroup.Append>
+          </InputGroup>
+        </td>
+        <td key={`npri`}>
+          <tr data-testid={`npri-`}></tr>
+        </td>
+        <td key={`lease`}>
+          <InputGroup className="lease">
+            <FormControl placeholder={'add a lease name'} />
+          </InputGroup>
+        </td>
+        <td>
+          <div>
+            <Button variant="light" onClick={() => removeRow()}>
+              <Icon icon={'remove'} />
+            </Button>
+          </div>
+        </td>
+      </tr>
     );
     updateTableRows((rows) => [...rows, newRow]);
+  };
+
+  const addNpri = (row) => {
+    const npriRow = (
+      <tr data-testid={`mineralInterest-$`}>
+        <td id={`mineralInterest-`}>
+          <InputGroup className="owner">
+            <Icon icon={'indent'} />
+            {'  '}
+            <FormControl name="npriOwner" placeholder="add Owner" />
+          </InputGroup>
+        </td>
+        <td></td>
+        <td id={`mineralInterest-`}>
+          <InputGroup>
+            <FormControl placeholder="add Interest" />
+            <InputGroup.Append>
+              <InputGroup.Text>%</InputGroup.Text>
+            </InputGroup.Append>
+          </InputGroup>
+        </td>
+        <td></td>
+        <td>
+          <div>
+            <Button variant="light" onClick={removeRow}>
+              <Icon icon={'remove'} />
+            </Button>
+          </div>
+        </td>
+      </tr>
+    );
+    updateTableRows((rows) => [...rows, npriRow]);
   };
 
   //call the onChange prop to pass the tests
@@ -113,15 +167,14 @@ const EditTractOwnership = ({ value = [], onChange = () => {} }) => {
   //   const
   // }
 
-  //function to delete tracts
+  //function to delete mineral Interest
   const removeRow = (id) => {
     const del = tracts.filter((row) => row.index !== id);
     console.log(del);
-
     updateTableRows(del);
   };
 
-  return (
+  return tablerows ? (
     <div>
       <div>
         <Table hover onChange={updateTableRows}>
@@ -137,18 +190,26 @@ const EditTractOwnership = ({ value = [], onChange = () => {} }) => {
         </Table>
       </div>
       <div>
-        <Button variant="light">
+        <Button variant="light" onClick={addNpri}>
           <Icon icon={'add'} />
+          {'  '}
           Add NPRI
         </Button>
       </div>
       <div>
-        <Button variant="light" onClick={addRow} onChange={onChange}>
+        <Button
+          variant="light"
+          onClick={addMineralInterest}
+          onChange={onChange}
+        >
           <Icon icon={'add'} />
+          {'  '}
           Add Mineral Interest
         </Button>
       </div>
     </div>
+  ) : (
+    <div></div>
   );
 };
 
